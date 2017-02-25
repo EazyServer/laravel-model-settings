@@ -1,5 +1,3 @@
-#STILL IN DEVELOPMENT
-
 # Laravel Model Settings
 
 Add settings feature to Eloquent models in Laravel 5.
