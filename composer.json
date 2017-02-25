@@ -1,0 +1,18 @@
+{
+    "name": "yarob/laravel-model-settings",
+    "description": "Laravel 5.0+ package to manage eloquent settings in JSON format",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Yarob Al-Taay",
+            "email": "yarob83@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Yarob\\LaravelModelSettings\\": "src"
+        }
+    }
+}
