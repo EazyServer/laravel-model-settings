@@ -1,4 +1,4 @@
-#STILL IN DEVELOPMENTgit 
+#STILL IN DEVELOPMENT
 
 # Laravel Model Settings
 
@@ -69,7 +69,7 @@ Your model and database must have column named `settings` in the database to sto
 Better demonstrated in example
 
 ```php
-$user = $user = App\User::first();
+$user = App\User::first();
 
 $user->settings()->save(array(
 		'address' => 'London',
