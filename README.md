@@ -57,7 +57,7 @@ class User extends Model
 ## Migration
 Your model MUST have column named `settings` in the database to store the settings values.
 
-You can add this manually via a migration on the intended model ```php $table->json('settings')->nullable(); ```. 
+You can add this manually via a migration on the intended model ` $table->json('settings')->nullable(); `. 
 The column should be big enough to accommodate all settings after json encoded.
 
 ## Usage
