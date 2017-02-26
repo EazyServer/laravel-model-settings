@@ -2,6 +2,7 @@
 
 namespace Yarob\LaravelModelSettings;
 
+use ErrorException;
 use Yarob\LaravelModelSettings\Services\ModelSettingsService;
 
 /**
@@ -44,13 +45,32 @@ trait HasSettings
     }
 
     /**
-     * Return the sluggable configuration array for this model.
-     * Must be implemented at the model class
      *
-     * @return array
+     * @return \Yarob\LaravelModelSettings\Services\ModelSettingsService
      */
     public function settings()
     {
     	return new ModelSettingsService($this);
+    }
+
+	/**
+	 * Define `settings` Accessor for Models
+	 *
+	 * @param $settings
+	 * @return collection
+	 * @throws ErrorException
+	 */
+    public function getSettingsAttribute($settings)
+    {
+    	$jsonDecodedSettings = json_decode($settings);
+
+	    if(json_last_error() == JSON_ERROR_NONE)
+	    {
+    	    return collect( $jsonDecodedSettings );
+	    }
+	    else
+	    {
+	    	throw new ErrorException('None json format encountered in `settings` column on `'.$this->getTable().'` table on database!');
+	    }
     }
 }

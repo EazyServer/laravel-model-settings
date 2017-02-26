@@ -5,7 +5,11 @@ Add settings feature to Eloquent models in Laravel 5.
 
 ## Background
 
-This has been developed to simplify adding "settings" feature to any eloquent model on your laravel project. Settings WILL be stored in `json` format, which has it's pros and cons!
+This has been developed to simplify adding "settings" feature to any eloquent model on your laravel project. 
+
+Settings WILL be stored in `json` format/object! Is `json` the best way? Well it's your call! pros: super flexible, you can add/remove settings without code alteration (apart from `app/config/model-settings.php` see below). cons: expensive when querying/searching for certain `key => value` in `settings` per model.
+
+`settings` will be casted into Laravel `Collection` for maximum functionality and usage.
 
 ## Installation
 To install the package via Composer:
@@ -29,7 +33,7 @@ php artisan vendor:publish --provider="Yarob\LaravelModelSettings\ServiceProvide
 ## Updating your Eloquent Models
 
 Your models should use the `hasSettings` trait.
-You must also add `settings` to your `fillable` array, and then cast `settings` to `json` as shown in the example below
+You must also add `settings` to your `fillable` array as shown in the example below
 
 ```php
 use Yarob\LaravelModelSettings\HasSettings;
@@ -46,21 +50,15 @@ class User extends Model
     protected $fillable = [
         'name', 'email', 'settings'
     ];
-    
-    
-    /**
-     * The attributes that should be casted.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'settings' =>'json',
-    ];
 
 }
 ```
 
-Your model and database must have column named `settings` in the database to store the settings values. You can add this manually via a migration on the intended model. The column should be text and big enough to store all settings after json encoded.
+## Migration
+Your model MUST have column named `settings` in the database to store the settings values.
+
+You can add this manually via a migration on the intended model ```php $table->json('settings')->nullable(); ```. 
+The column should be big enough to accommodate all settings after json encoded.
 
 ## Usage
 
@@ -74,7 +72,7 @@ $user->settings()->save(array(
 		'phone_number' => '0123456789'
 	    ));
 	    
-dd($user->settings);
+print_r($user->settings);
 ```
 ## Configuration
 
@@ -95,7 +93,18 @@ return [
 ];
 ```
 
+Pay attention that Model name in `model-settings.php` is case sensitive! so if you have a `foo` Model, then
 
+```php
+return [
+    'foo' => [
+    		'key1',
+    		'key2',
+    		...
+    	],
+    	...
+];
+```
 
 ## Copyright and License
 

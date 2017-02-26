@@ -33,34 +33,39 @@ class ModelSettingsService
 	/**
 	 * Save settings for current model.
 	 *
-	 * @param null $settings
-	 * @return bool
+	 * @param array $rawSettings
+	 * @return bool/collection
 	 * @throws ErrorException
 	 * @internal param Model $model
 	 */
-    public function save($settings=null)
+    public function save($rawSettings=array())
     {
-    	if(!empty($settings) and !empty($this->model))
+    	if(!empty($this->model) and is_array($rawSettings) and !empty($rawSettings))
 	    {
 	    	if (!Schema::hasColumn($this->model->getTable(), 'settings')) {
-	    		throw new ErrorException('"settings" column seems to be missing on "'.class_basename($this->model).'" table on database!');
+	    		throw new ErrorException('`settings` column seems to be missing on `'.$this->model->getTable().'` table on database!');
 		    }
 		    else
 	        {
 		        $allowedSettingsKeys = $this->getConfiguration();
-				$oldSettings = is_array($this->model->settings)?$this->model->settings:array();
 
-		        $settings = array_merge(
+				$oldSettings = $this->model->settings->toArray();
+
+		        $newSettings = array_merge(
 			        $oldSettings,
 			        array_only(
-			        	$settings,
+				        $rawSettings,
 				        $allowedSettingsKeys
 			        )
 		        );
 
-		        return $this->model->update(compact('settings'));
+		        if($this->model->update( array( 'settings' => json_encode($newSettings) ) ))
+		        {
+		        	return collect($newSettings);
+		        }
 		    }
 	    }
+	    return false;
     }
 
     /**
